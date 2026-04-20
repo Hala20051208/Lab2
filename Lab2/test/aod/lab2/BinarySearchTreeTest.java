@@ -1,5 +1,6 @@
 package aod.lab2;
 
+//Test
 public class BinarySearchTreeTest {
 
     public static void main(String[] args) {
