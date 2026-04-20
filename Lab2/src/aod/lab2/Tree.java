@@ -5,6 +5,7 @@ package aod.lab2;
 
 /**
  * @author 24haal14
+ * .
  */
 
 public interface Tree<T> {

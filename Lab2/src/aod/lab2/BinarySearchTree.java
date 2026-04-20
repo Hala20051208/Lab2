@@ -5,6 +5,7 @@ package aod.lab2;
 
 /**
  * @author 24haal14
+ * .
  */
 public class BinarySearchTree<T extends Comparable<? super T>> implements Tree<T> {
 
