@@ -3,7 +3,7 @@ package aod.lab2;
 import java.util.Random;
 
 /**
- * Klass för att mäta söktid i BinarySearchTree.
+ * Klass för att mäta söktid i BinarySearchTree..
  *
  * Två experiment görs:
  * 1. Träd byggda med slumpade heltal
