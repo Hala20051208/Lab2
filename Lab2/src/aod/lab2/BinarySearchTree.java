@@ -7,7 +7,7 @@ package aod.lab2;
  * mindre värden placeras i vänster delträd och större värden
  * placeras i höger delträd.
  *
- * Dubbletter ignoreras i denna implementation.
+ * Dubbletter ignoreras i denna implementation..
  *
  * @param <T> typen som lagras i trädet
  */
