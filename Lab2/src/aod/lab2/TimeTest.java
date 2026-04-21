@@ -3,17 +3,41 @@ package aod.lab2;
 import java.util.Random;
 
 /**
- * Klass för att mäta söktid i BinarySearchTree..
- *
- * Två experiment görs:
- * 1. Träd byggda med slumpade heltal
- * 2. Träd byggda med sorterade heltal.
- *
- * Resultaten skrivs ut så att de kan föras över till tabell och diagram i rapporten.
+ * Klass för att mäta söktid i BinarySearchTree.
  */
-public class TimeTest {
+public final class TimeTest {
 
-    public static void main(String[] args) {
+    /** Antal sökningar som görs per test. */
+    private static final int NUMBER_OF_SEARCHES = 100000;
+
+    /** Övre gräns för slumpade tal. */
+    private static final int RANDOM_BOUND = 1000000;
+
+    /** Omvandling från nanosekunder till millisekunder. */
+    private static final int NANO_TO_MILLI = 1000000;
+
+    /** Storlekar för test med slumpade heltal. */
+    private static final int[] RANDOM_SIZES = {
+        20000, 40000, 80000, 160000
+    };
+
+    /** Storlekar för test med sorterade heltal. */
+    private static final int[] SORTED_SIZES = {
+        5000, 10000, 15000, 20000
+    };
+
+    /**
+     * Privat konstruktor eftersom klassen bara innehåller statiska metoder.
+     */
+    private TimeTest() {
+    }
+
+    /**
+     * Kör båda tidsmätningarna.
+     *
+     * @param args kommandoradsargument
+     */
+    public static void main(final String[] args) {
         testRandomNumbers();
         System.out.println();
         testSortedNumbers();
@@ -23,38 +47,41 @@ public class TimeTest {
      * Testar söktider i träd byggda med slumpade heltal.
      */
     private static void testRandomNumbers() {
-        int[] sizes = {20000, 40000, 80000, 160000};
-        int searches = 100000;
-        Random random = new Random();
+        final Random random = new Random();
 
         System.out.println("SLUMPADE HELTAL");
         System.out.println("n\tTid (ms)\tKvot T(2n)/T(n)");
 
         long previousTime = -1;
 
-        for (int n : sizes) {
-            BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        for (final int n : RANDOM_SIZES) {
+            final BinarySearchTree<Integer> tree =
+                new BinarySearchTree<Integer>();
 
-            // Bygg trädet med slumpade tal
             for (int i = 0; i < n; i++) {
-                tree.add(random.nextInt(1_000_000));
+                tree.add(random.nextInt(RANDOM_BOUND));
             }
 
-            // Mät endast söktiden
-            long start = System.nanoTime();
+            final long start = System.nanoTime();
 
-            for (int i = 0; i < searches; i++) {
-                tree.searchFor(random.nextInt(1_000_000));
+            for (int i = 0; i < NUMBER_OF_SEARCHES; i++) {
+                tree.searchFor(random.nextInt(RANDOM_BOUND));
             }
 
-            long end = System.nanoTime();
-            long elapsedMs = (end - start) / 1_000_000;
+            final long end = System.nanoTime();
+            final long elapsedMs = (end - start) / NANO_TO_MILLI;
 
             if (previousTime == -1) {
                 System.out.println(n + "\t" + elapsedMs + "\t\t-");
             } else {
-                double quotient = (double) elapsedMs / previousTime;
-                System.out.printf("%d\t%d\t\t%.3f%n", n, elapsedMs, quotient);
+                final double quotient =
+                    (double) elapsedMs / previousTime;
+                System.out.printf(
+                    "%d\t%d\t\t%.3f%n",
+                    n,
+                    elapsedMs,
+                    quotient
+                );
             }
 
             previousTime = elapsedMs;
@@ -65,44 +92,47 @@ public class TimeTest {
      * Testar söktider i träd byggda med sorterade heltal.
      */
     private static void testSortedNumbers() {
-        int[] sizes = {5000, 10000, 15000, 20000};
-        int searches = 100000;
-        Random random = new Random();
+        final Random random = new Random();
 
         System.out.println("SORTERADE HELTAL");
         System.out.println("n\tTid (ms)\tKvot T(2n)/T(n)");
 
         long previousTime = -1;
 
-        for (int n : sizes) {
-            BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        for (final int n : SORTED_SIZES) {
+            final BinarySearchTree<Integer> tree =
+                new BinarySearchTree<Integer>();
 
             try {
-                // Bygg trädet med sorterade tal
                 for (int i = 0; i < n; i++) {
                     tree.add(i);
                 }
 
-                // Mät endast söktiden
-                long start = System.nanoTime();
+                final long start = System.nanoTime();
 
-                for (int i = 0; i < searches; i++) {
+                for (int i = 0; i < NUMBER_OF_SEARCHES; i++) {
                     tree.searchFor(random.nextInt(n));
                 }
 
-                long end = System.nanoTime();
-                long elapsedMs = (end - start) / 1_000_000;
+                final long end = System.nanoTime();
+                final long elapsedMs = (end - start) / NANO_TO_MILLI;
 
                 if (previousTime == -1) {
                     System.out.println(n + "\t" + elapsedMs + "\t\t-");
                 } else {
-                    double quotient = (double) elapsedMs / previousTime;
-                    System.out.printf("%d\t%d\t\t%.3f%n", n, elapsedMs, quotient);
+                    final double quotient =
+                        (double) elapsedMs / previousTime;
+                    System.out.printf(
+                        "%d\t%d\t\t%.3f%n",
+                        n,
+                        elapsedMs,
+                        quotient
+                    );
                 }
 
                 previousTime = elapsedMs;
 
-            } catch (StackOverflowError e) {
+            } catch (StackOverflowError error) {
                 System.out.println(n + "\tStackOverflowError\t-");
             }
         }

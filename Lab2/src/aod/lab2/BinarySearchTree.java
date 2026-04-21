@@ -1,36 +1,96 @@
 package aod.lab2;
 
 /**
- * Implementation av ett binärt sökträd...
+ * Implementation av ett binärt sökträd.
  *
  * Trädet lagrar element i sorterad ordning enligt compareTo():
- * - mindre värden placeras i vänster delträd
- * - större värden placeras i höger delträd
+ * mindre värden placeras i vänster delträd och större värden
+ * placeras i höger delträd.
  *
- * I denna implementation ignoreras dubbletter.
+ * Dubbletter ignoreras i denna implementation.
  *
- * @param <T> typen som lagras i trädet.
- *            Måste kunna jämföras med compareTo().
+ * @param <T> typen som lagras i trädet
  */
-public class BinarySearchTree<T extends Comparable<? super T>> implements Tree<T> {
+public class BinarySearchTree<T extends Comparable<? super T>>
+    implements Tree<T> {
 
     /**
      * Inre klass som representerar en nod i trädet.
      */
-    private class BSTNode {
-        T item;
-        BSTNode left;
-        BSTNode right;
+    private final class BSTNode {
+
+        /** Värdet som lagras i noden. */
+        private T item;
+
+        /** Referens till vänster barn. */
+        private BSTNode left;
+
+        /** Referens till höger barn. */
+        private BSTNode right;
 
         /**
          * Skapar en ny nod med ett värde.
          *
-         * @param item värdet som ska lagras i noden
+         * @param newItem värdet som ska lagras i noden
          */
-        BSTNode(T item) {
-            this.item = item;
+        BSTNode(final T newItem) {
+            this.item = newItem;
             this.left = null;
             this.right = null;
+        }
+
+        /**
+         * Returnerar nodens värde.
+         *
+         * @return nodens värde
+         */
+        private T getItem() {
+            return item;
+        }
+
+        /**
+         * Sätter nodens värde.
+         *
+         * @param newItem nytt värde
+         */
+        private void setItem(final T newItem) {
+            this.item = newItem;
+        }
+
+        /**
+         * Returnerar vänster barn.
+         *
+         * @return vänster barn
+         */
+        private BSTNode getLeft() {
+            return left;
+        }
+
+        /**
+         * Sätter vänster barn.
+         *
+         * @param newLeft vänster barn
+         */
+        private void setLeft(final BSTNode newLeft) {
+            this.left = newLeft;
+        }
+
+        /**
+         * Returnerar höger barn.
+         *
+         * @return höger barn
+         */
+        private BSTNode getRight() {
+            return right;
+        }
+
+        /**
+         * Sätter höger barn.
+         *
+         * @param newRight höger barn
+         */
+        private void setRight(final BSTNode newRight) {
+            this.right = newRight;
         }
     }
 
@@ -51,48 +111,43 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Tree<T
     /**
      * Lägger till ett element i trädet.
      *
-     * Om elementet redan finns i trädet ignoreras det,
-     * alltså lagras inga dubbletter.
+     * Om elementet redan finns ignoreras det.
      *
-     * @param item elementet som ska läggas till
+     * @param itemToAdd elementet som ska läggas till
      */
     @Override
-    public void add(T item) {
-        root = addRecursive(root, item);
+    public void add(final T itemToAdd) {
+        root = addRecursive(root, itemToAdd);
     }
 
     /**
      * Rekursiv hjälpmetod för att lägga till ett element.
      *
-     * Basfall:
-     * - Om aktuell nod är null skapas en ny nod.
-     *
-     * Rekursionssteg:
-     * - Om item är mindre än nodens värde går vi vänster.
-     * - Om item är större än nodens värde går vi höger.
-     * - Om item är lika med nodens värde ignoreras det.
-     *
-     * @param node aktuell nod
-     * @param item elementet som ska läggas till
+     * @param currentNode aktuell nod
+     * @param itemToAdd elementet som ska läggas till
      * @return roten till det uppdaterade delträdet
      */
-    private BSTNode addRecursive(BSTNode node, T item) {
-        if (node == null) {
+    private BSTNode addRecursive(final BSTNode currentNode,
+        final T itemToAdd) {
+
+        if (currentNode == null) {
             size++;
-            return new BSTNode(item);
+            return new BSTNode(itemToAdd);
         }
 
-        int compareValue = item.compareTo(node.item);
+        final int compareValue = itemToAdd.compareTo(currentNode.getItem());
 
         if (compareValue < 0) {
-            node.left = addRecursive(node.left, item);
+            currentNode.setLeft(
+                addRecursive(currentNode.getLeft(), itemToAdd)
+            );
         } else if (compareValue > 0) {
-            node.right = addRecursive(node.right, item);
+            currentNode.setRight(
+                addRecursive(currentNode.getRight(), itemToAdd)
+            );
         }
-        // Om compareValue == 0 görs inget:
-        // dubbletter ignoreras.
 
-        return node;
+        return currentNode;
     }
 
     /**
@@ -102,38 +157,39 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Tree<T
      * @return true om elementet finns, annars false
      */
     @Override
-    public boolean searchFor(T itemToSearchFor) {
+    public boolean searchFor(final T itemToSearchFor) {
         return searchRecursive(root, itemToSearchFor);
     }
 
     /**
      * Rekursiv hjälpmetod för sökning i trädet.
      *
-     * Basfall:
-     * - Om aktuell nod är null finns elementet inte.
-     *
-     * Rekursionssteg:
-     * - Om item är mindre än nodens värde söker vi vänster.
-     * - Om item är större än nodens värde söker vi höger.
-     * - Om item är lika med nodens värde har vi hittat det.
-     *
-     * @param node aktuell nod
-     * @param item elementet som söks
+     * @param currentNode aktuell nod
+     * @param itemToSearchFor elementet som söks
      * @return true om elementet finns, annars false
      */
-    private boolean searchRecursive(BSTNode node, T item) {
-        if (node == null) {
+    private boolean searchRecursive(final BSTNode currentNode,
+        final T itemToSearchFor) {
+
+        if (currentNode == null) {
             return false;
         }
 
-        int compareValue = item.compareTo(node.item);
+        final int compareValue =
+            itemToSearchFor.compareTo(currentNode.getItem());
 
         if (compareValue == 0) {
             return true;
         } else if (compareValue < 0) {
-            return searchRecursive(node.left, item);
+            return searchRecursive(
+                currentNode.getLeft(),
+                itemToSearchFor
+            );
         } else {
-            return searchRecursive(node.right, item);
+            return searchRecursive(
+                currentNode.getRight(),
+                itemToSearchFor
+            );
         }
     }
 
@@ -159,14 +215,11 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Tree<T
     /**
      * Tar bort ett element ur trädet.
      *
-     * Om elementet inte finns returneras false.
-     * Om elementet finns tas det bort och metoden returnerar true.
-     *
      * @param itemToRemove elementet som ska tas bort
      * @return true om elementet fanns och togs bort, annars false
      */
     @Override
-    public boolean remove(T itemToRemove) {
+    public boolean remove(final T itemToRemove) {
         if (!searchFor(itemToRemove)) {
             return false;
         }
@@ -179,86 +232,76 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Tree<T
     /**
      * Rekursiv hjälpmetod för att ta bort ett element.
      *
-     * Basfall:
-     * - Om aktuell nod är null finns inget att ta bort.
-     *
-     * Rekursionssteg:
-     * - Om item är mindre än nodens värde går vi vänster.
-     * - Om item är större än nodens värde går vi höger.
-     * - Om item är lika med nodens värde ska noden tas bort.
-     *
-     * Vid borttagning finns tre fall:
-     * 1. Noden har inga barn -> returnera null
-     * 2. Noden har ett barn -> returnera barnnoden
-     * 3. Noden har två barn ->
-     *    ersätt nodens värde med minsta värdet i höger delträd
-     *    och ta sedan bort den noden där minsta värdet fanns
-     *
-     * @param node aktuell nod
-     * @param item elementet som ska tas bort
+     * @param currentNode aktuell nod
+     * @param itemToRemove elementet som ska tas bort
      * @return roten till det uppdaterade delträdet
      */
-    private BSTNode removeRecursive(BSTNode node, T item) {
-        if (node == null) {
+    private BSTNode removeRecursive(final BSTNode currentNode,
+        final T itemToRemove) {
+
+        if (currentNode == null) {
             return null;
         }
 
-        int compareValue = item.compareTo(node.item);
+        final int compareValue =
+            itemToRemove.compareTo(currentNode.getItem());
 
         if (compareValue < 0) {
-            node.left = removeRecursive(node.left, item);
+            currentNode.setLeft(
+                removeRecursive(currentNode.getLeft(), itemToRemove)
+            );
         } else if (compareValue > 0) {
-            node.right = removeRecursive(node.right, item);
+            currentNode.setRight(
+                removeRecursive(currentNode.getRight(), itemToRemove)
+            );
         } else {
-            // Fall 1: noden har inga barn
-            if (node.left == null && node.right == null) {
+            if (currentNode.getLeft() == null
+                && currentNode.getRight() == null) {
                 return null;
             }
 
-            // Fall 2: noden har bara höger barn
-            if (node.left == null) {
-                return node.right;
+            if (currentNode.getLeft() == null) {
+                return currentNode.getRight();
             }
 
-            // Fall 2: noden har bara vänster barn
-            if (node.right == null) {
-                return node.left;
+            if (currentNode.getRight() == null) {
+                return currentNode.getLeft();
             }
 
-            // Fall 3: noden har två barn
-            T minValue = findMin(node.right);
-            node.item = minValue;
-            node.right = removeRecursive(node.right, minValue);
+            final T minValue = findMin(currentNode.getRight());
+            currentNode.setItem(minValue);
+            currentNode.setRight(
+                removeRecursive(currentNode.getRight(), minValue)
+            );
         }
 
-        return node;
+        return currentNode;
     }
 
     /**
      * Hittar minsta värdet i ett delträd.
      *
-     * Minsta värdet i ett BST finns längst till vänster.
-     *
-     * @param node roten till delträdet
+     * @param currentNode roten till delträdet
      * @return minsta värdet i delträdet
      */
-    private T findMin(BSTNode node) {
-        while (node.left != null) {
-            node = node.left;
+    private T findMin(final BSTNode currentNode) {
+        BSTNode tempNode = currentNode;
+
+        while (tempNode.getLeft() != null) {
+            tempNode = tempNode.getLeft();
         }
-        return node.item;
+
+        return tempNode.getItem();
     }
 
     /**
-     * Returnerar trädets innehåll som en sträng i sorterad ordning.
+     * Returnerar trädets innehåll i sorterad ordning.
      *
-     * Traverseringen sker med djupet-först-traversering av typen in-order.
-     *
-     * @return en sträng med trädets innehåll i sorterad ordning
+     * @return en sträng med trädets innehåll
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         inorder(root, builder);
         return builder.toString().trim();
     }
@@ -266,19 +309,18 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Tree<T
     /**
      * Rekursiv hjälpmetod för in-order-traversering.
      *
-     * Ordningen är:
-     * vänster delträd -> rot -> höger delträd
-     *
-     * @param node aktuell nod
+     * @param currentNode aktuell nod
      * @param builder strängbyggare där resultatet samlas
      */
-    private void inorder(BSTNode node, StringBuilder builder) {
-        if (node == null) {
+    private void inorder(final BSTNode currentNode,
+        final StringBuilder builder) {
+
+        if (currentNode == null) {
             return;
         }
 
-        inorder(node.left, builder);
-        builder.append(node.item).append(" ");
-        inorder(node.right, builder);
+        inorder(currentNode.getLeft(), builder);
+        builder.append(currentNode.getItem()).append(" ");
+        inorder(currentNode.getRight(), builder);
     }
 }
