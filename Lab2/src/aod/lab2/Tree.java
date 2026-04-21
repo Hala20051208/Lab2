@@ -1,29 +1,44 @@
-/**
- * 
- */
 package aod.lab2;
 
 /**
- * @author 24haal14
- * 
- * Interface för ett träd (BST)..
- * Bestämmer vilka metoder som måste finnas
+ * Interface för ett träd.
+ *
+ * @param <T> typen som lagras i trädet
  */
-
 public interface Tree<T> {
 
-	  // Lägger till ett element i trädet
-    public void add(T item);
+    /**
+     * Lägger till ett element i trädet.
+     *
+     * @param itemToAdd elementet som ska läggas till
+     */
+    void add(T itemToAdd);
 
-    // Söker efter ett element (true om det finns)
-    public boolean searchFor(T itemToSearchFor);
+    /**
+     * Söker efter ett element i trädet.
+     *
+     * @param itemToSearchFor elementet som ska sökas efter
+     * @return true om elementet finns, annars false
+     */
+    boolean searchFor(T itemToSearchFor);
 
-    // Returnerar antal element i trädet
-    public int size();
+    /**
+     * Returnerar antalet element i trädet.
+     *
+     * @return antal element
+     */
+    int size();
 
-    // Tömmer hela trädet
-    public void clear();
+    /**
+     * Tömmer trädet på alla element.
+     */
+    void clear();
 
-    // Tar bort ett element (true om det fanns)
-    public boolean remove(T itemToRemove);
+    /**
+     * Tar bort ett element ur trädet.
+     *
+     * @param itemToRemove elementet som ska tas bort
+     * @return true om elementet fanns och togs bort, annars false
+     */
+    boolean remove(T itemToRemove);
 }
