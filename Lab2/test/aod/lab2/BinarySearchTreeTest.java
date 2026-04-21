@@ -1,7 +1,7 @@
 package aod.lab2;
 
 /**
- * Enkel testklass för att prova BinarySearchTree manuellt.
+ * Enkel testklass för att prova BinarySearchTree manuellt..
  */
 public class BinarySearchTreeTest {
 

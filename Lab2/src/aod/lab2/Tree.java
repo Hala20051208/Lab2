@@ -6,7 +6,7 @@ package aod.lab2;
 /**
  * @author 24haal14
  * 
- * Interface för ett träd (BST)
+ * Interface för ett träd (BST).
  * Bestämmer vilka metoder som måste finnas
  */
 

@@ -7,7 +7,7 @@ import java.util.Random;
  *
  * Två experiment görs:
  * 1. Träd byggda med slumpade heltal
- * 2. Träd byggda med sorterade heltal
+ * 2. Träd byggda med sorterade heltal.
  *
  * Resultaten skrivs ut så att de kan föras över till tabell och diagram i rapporten.
  */

@@ -1,7 +1,7 @@
 package aod.lab2;
 
 /**
- * Implementation av ett binärt sökträd.
+ * Implementation av ett binärt sökträd..
  *
  * Trädet lagrar element i sorterad ordning enligt compareTo():
  * - mindre värden placeras i vänster delträd
